@@ -1,0 +1,12 @@
+{
+  "providerId": "Microsoft.Tools.ServiceModel.Svcutil",
+  "version": "2.1.0",
+  "options": {
+    "inputs": [
+      "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?WSDL"
+    ],
+    "outputFile": "Reference.cs",
+    "targetFramework": "net6.0",
+    "typeReuseMode": "All"
+  }
+}
