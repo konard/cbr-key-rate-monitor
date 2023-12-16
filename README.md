@@ -30,9 +30,18 @@ The application will now fetch the key rate every 2 hours and output it to the c
 
 Please note this application will run indefinitely until you stop it manually. This is done by design to ensure that the application fetches the key rate every 2 hours.
 
+### Example output
+
+```
+$ dotnet run
+API: Last key rate 15.00 (effective from 2023-12-15T00:00:00)
+RSS: Last key rate 16.00 (published at 2023-12-15T00:00:00)
+```
+
 ## Update schema
 
 ```
+
 dotnet-svcutil https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?WSDL
 ```
 
