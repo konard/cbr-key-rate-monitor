@@ -2,6 +2,7 @@
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using System.Xml;
+using ServiceReference;
 
 class Program
 {

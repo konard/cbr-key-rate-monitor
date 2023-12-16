@@ -41,7 +41,7 @@ RSS: Last key rate 16.00 (published at 2023-12-15T00:00:00)
 ## Update schema
 
 ```
-
+rm -rf ServiceReference
 dotnet-svcutil https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?WSDL
 ```
 
