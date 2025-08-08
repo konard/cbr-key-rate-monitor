@@ -22,9 +22,9 @@ class Program
   {
     var client = new DailyInfoSoapClient(DailyInfoSoapClient.EndpointConfiguration.DailyInfoSoap12);
     var now = DateTime.Now;
-    var response = client.KeyRateAsync(now.AddDays(-7), now).Result;
-    var lastDate = DateTime.MinValue;
-    var lastRate = 0.0M;
+    var response = client.KeyRateAsync(now.AddDays(-30), now).Result;
+    var rates = new List<(DateTime date, decimal rate)>();
+    
     foreach (var element in response.Nodes)
     {
       if (element.Name.LocalName == "diffgram")
@@ -47,17 +47,21 @@ class Program
                 decimal.TryParse(innerElement.Value, out rate);
               }
             }
-            if (date > lastDate)
-            {
-              lastDate = date;
-              lastRate = rate;
-            }
-            // Console.WriteLine($"{date.ToString("s")}: {rate}");
+            rates.Add((date, rate));
           }
         }
       }
     }
-    Console.WriteLine($"API: Last key rate {lastRate} (effective at {lastDate.ToString("s")})");
+    
+    // Sort by date
+    rates = rates.OrderBy(r => r.date).ToList();
+    
+    if (rates.Count > 0)
+    {
+      var lastRate = rates.Last().rate;
+      var effectiveFromDate = rates.Where(r => r.rate == lastRate).First().date;
+      Console.WriteLine($"API: Last key rate {lastRate} (effective from {effectiveFromDate.ToString("s")})");
+    }
   }
 
   private static void CheckKeyRateRssFeed(object? stateInfo)
