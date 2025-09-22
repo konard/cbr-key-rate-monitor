@@ -7,14 +7,27 @@ using ServiceReference;
 class Program
 {
   private static readonly CultureInfo ruCulture = CultureInfo.GetCultureInfo("ru-RU");
+  private static readonly KeyRateDataStore dataStore = new KeyRateDataStore();
 
   static void Main(string[] args)
   {
+    // Show historical data on startup
+    ShowHistoricalData();
+
     Timer stateTimer = new Timer((state) =>
     {
       CheckKeyRateAPI(state);
       CheckKeyRateRssFeed(state);
     }, null, 0, 1000 * 60 * 120); // It will check every two hours
+
+    // Handle shutdown gracefully
+    Console.CancelKeyPress += (sender, e) =>
+    {
+      e.Cancel = true;
+      dataStore.Dispose();
+      Environment.Exit(0);
+    };
+
     while (true) { Thread.Sleep(1000); } // Prevent console app from closing
   }
 
@@ -61,6 +74,12 @@ class Program
       var lastRate = rates.Last().rate;
       var effectiveFromDate = rates.Where(r => r.rate == lastRate).First().date;
       Console.WriteLine($"API: Last key rate {lastRate} (effective from {effectiveFromDate.ToString("s")})");
+
+      // Store each rate in the database
+      foreach (var (date, rate) in rates)
+      {
+        dataStore.StoreKeyRate(date, rate, "API");
+      }
     }
   }
 
@@ -91,6 +110,43 @@ class Program
       }
     }
     Console.WriteLine($"RSS: Last key rate {lastRate} (published at {lastDate.ToString("s")})");
+
+    // Store the rate in the database if we found one
+    if (lastRate > 0 && lastDate > DateTime.MinValue)
+    {
+      dataStore.StoreKeyRate(lastDate, lastRate, "RSS");
+    }
+  }
+
+  private static void ShowHistoricalData()
+  {
+    Console.WriteLine("=== Historical Key Rates from Database ===");
+
+    var historicalRates = dataStore.GetAllKeyRates();
+    if (historicalRates.Count == 0)
+    {
+      Console.WriteLine("No historical data found in database.");
+    }
+    else
+    {
+      Console.WriteLine($"Found {historicalRates.Count} historical entries:");
+      foreach (var (date, rate, source) in historicalRates.Take(10)) // Show last 10 entries
+      {
+        Console.WriteLine($"{date:s}: {rate}% ({source})");
+      }
+
+      if (historicalRates.Count > 10)
+      {
+        Console.WriteLine($"... and {historicalRates.Count - 10} more entries");
+      }
+
+      var latest = dataStore.GetLatestKeyRate();
+      if (latest.HasValue)
+      {
+        Console.WriteLine($"Latest rate in database: {latest.Value.rate}% on {latest.Value.date:s}");
+      }
+    }
+    Console.WriteLine("==========================================\n");
   }
 
   private static void ListAllKeyRates(object? stateInfo)
