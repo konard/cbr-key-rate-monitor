@@ -15,5 +15,6 @@
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.10.*" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.10.*" />
     <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />
+    <PackageReference Include="Telegram.Bot" Version="22.7.2" />
   </ItemGroup>
 </Project>
