@@ -1,0 +1,31 @@
+{
+  "name": "cbr-key-rate-monitor",
+  "version": "1.0.0",
+  "description": "Monitor Central Bank of Russia key interest rate via SOAP API and RSS feeds",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "soap": "^1.0.0",
+    "rss-parser": "^3.13.0",
+    "xml2js": "^0.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cbr",
+    "central-bank",
+    "russia",
+    "key-rate",
+    "interest-rate",
+    "monitor",
+    "soap",
+    "rss"
+  ],
+  "author": "",
+  "license": "ISC"
+}
