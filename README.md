@@ -1,41 +1,51 @@
 # CBR Key Rate Monitor
 
-This is a .NET 8.0 console application that periodically fetches the Key Rate from the Central Bank of Russia (CBR) SOAP API and RSS feed, then prints to the console.
+Monitor the Central Bank of Russia's key interest rate using either .NET or JavaScript implementations. Both versions periodically fetch the Key Rate from the CBR SOAP API and RSS feed, then print to the console.
 
-## Prerequisites
+## Language Options
 
-You need to install the following software to run this program:
+Choose between two implementations:
 
-1. [Install .NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-   
-## How To Use
+### .NET 8.0 Version (C#)
 
-- Clone the repository or download the code.
-  
-- Navigate to your project folder in your terminal/command prompt.
+#### Prerequisites
+- [Install .NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-- Restore the necessary packages by running this command:
-  
-  ```sh
-  dotnet restore
-  ```
+#### How To Use
+1. Navigate to your project folder in terminal/command prompt
+2. Restore packages: `dotnet restore`
+3. Run: `dotnet run`
 
-- Execute the following command to run your console application:
-  
-  ```sh
-  dotnet run
-  ```
+### JavaScript Version (Node.js)
 
-The application will now fetch the key rate from both the CBR API and RSS feed every 2 hours and output it to the console. The API shows when the current rate became effective, while the RSS shows the publication date of rate announcements.
+#### Prerequisites
+- [Install Node.js 18+](https://nodejs.org/)
 
-Please note this application will run indefinitely until you stop it manually. This is done by design to ensure that the application fetches the key rate every 2 hours.
+#### How To Use
+1. Navigate to your project folder in terminal/command prompt
+2. Install dependencies: `npm install`
+3. Run: `npm start`
+
+## Features
+
+Both implementations provide:
+- Fetches key rate from CBR SOAP API with historical data
+- Parses CBR RSS feed for rate announcements
+- Runs every 2 hours automatically
+- Shows effective date vs. publication date
+- Graceful shutdown on Ctrl+C
+
+The application will run indefinitely until you stop it manually, fetching the key rate every 2 hours.
 
 ### Example output
 
 ```
-$ dotnet run
+$ npm start  # or dotnet run
+CBR Key Rate Monitor (JavaScript Version)
+Starting periodic checks every 2 hours...
 API: Last key rate 18.00 (effective from 2025-07-28T02:30:00)
 RSS: Last key rate 18.00 (published at 2025-07-25T00:00:00)
+Monitor running. Press Ctrl+C to stop.
 ```
 
 ## Update schema
